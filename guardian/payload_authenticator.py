@@ -1,3 +1,8 @@
+'''
+The file verifies the request payload.
+'''
+
+
 class PayloadAuthenticator:
     def __init__(self, payload, request):
         self.payload = payload
@@ -11,6 +16,7 @@ class PayloadAuthenticator:
             if not self.payload:
                 return self.is_authenticated
 
+            # using query params if the method is get
             if self.request.method == 'GET':
                 self.current_method = 'GET'
                 self.request_data = self.request.query_params
@@ -34,13 +40,16 @@ class PayloadAuthenticator:
                 break
 
     def __type_verifier(self, variable):
+        # if the variable is None then no need to check type
         if self.payload[variable] is None:
             return True
 
+        # if the variable value is tuple then the data should be in the tuple
         elif type(self.payload[variable]) is tuple:
             return self.request_data[variable] in self.payload[variable]
 
         else:
+            # checking the type of the variable if it matches the data type
             if self.current_method == 'GET' \
                     and type(self.payload[variable](self.request_data[variable])) == self.payload[variable]:
                 return True
