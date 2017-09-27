@@ -5,7 +5,7 @@ setup(
     name="guardian",
 
     # Version number (initial):
-    version="0.1.7",
+    version="1.0.0",
 
     # Application author details:
     author="Ankur Jain",
