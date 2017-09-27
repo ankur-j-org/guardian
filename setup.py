@@ -1,8 +1,8 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     # Application name:
-    name="guardian",
+    name="django_rest_guardian",
 
     # Version number (initial):
     version="1.0.0",
@@ -12,18 +12,18 @@ setup(
     author_email="ankurj630@gmail.com",
 
     # Packages
-    packages=["guardian"],
+    packages=["django_rest_guardian"],
 
     # Include additional files into the package
     # include_package_data=True,
 
     # Details
-    url="http://droidlife.github.io/me",
+    url="https://github.com/droidlife/guardian",
 
     #
     # license="LICENSE.txt",
     description="Useful towel-related stuff.",
-    requires=['djangorestframework']
+    install_requires=['djangorestframework']
 
     # long_description=open("README.txt").read(),
 )

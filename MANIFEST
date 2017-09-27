@@ -3,4 +3,5 @@ README.txt
 setup.py
 guardian/__init__.py
 guardian/payload_authenticator.py
+guardian/permission.py
 guardian/user_authenticator.py
