@@ -161,7 +161,7 @@ class UserAuthenticator(AuthPermission):
     def guard(self, request):
         if request.user_type == 'user':
             request.user = 'simon' # adding <user> param to request and returning it.
-            return True, request
+            return True
         else:
             return False
 ```
