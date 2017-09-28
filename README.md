@@ -123,16 +123,65 @@ class UserAuthenticator(AuthPermission):
     
     # returns 400 if the payload is invalid
     @guardian(id=int, name=unicode, hobbies=list) # we use unicode because python treats the string as unicode for data.
-    def get(self, request):
+    def post(self, request):
         print 'The payload is correct if you are seeing this message'
         
         return Response({'result': True}, status=status.HTTP_200_OK)
 ```
 
+# More Stuff
+
+**1. Both user authentication and payload verification**
+
+We can use user auth and payload verification both at the same time
+`app/views.py`
+
+ 
+ ```python
+ class UserView(APIView):
+   
+    @guardian(UserAuthenticator, AdminAuthenticator, id=int, name=unicode, hobbies=list)
+    def post(self, request):
+        print 'The user is authenticated and the payload is correct if you are seeing this message'
+        
+        return Response({'result': True}, status=status.HTTP_200_OK)
+```
  
  
- 
- 
+**2. Pass additional parameter with request**
+
+We can pass additional parameter with request to views layer
+
+`app/permission.py`
+
+```python
+from django_rest_guardian.permission import AuthPermission
+
+class UserAuthenticator(AuthPermission):
+    def guard(self, request):
+        if request.user_type == 'user':
+            request.user = 'simon' # adding <user> param to request and returning it.
+            return True, request
+        else:
+            return False
+```
+
+Now we can access this parameter in view layer `app/views.py` 
+
+ ```python
+ class UserView(APIView):
+   
+    @guardian(UserAuthenticator)
+    def post(self, request):
+        print request.user # prints 'simon'
+        
+        return Response({'result': True}, status=status.HTTP_200_OK)
+```
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
  
  
  
