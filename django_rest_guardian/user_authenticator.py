@@ -37,24 +37,6 @@ class UserAuthenticator(object):
                 if response:
                     self.is_authenticated = True
                     break
-
-            # if response is a tuple then the expectation are to be of form (True, request)
-            elif type(response) is tuple:
-                if len(response) > 2:
-                    raise AssertionError('Too many values to unpack. ' +
-                                         'Expected 2 found more from {0} class'.format(authenticator.__name__))
-                if type(response[0]) is not bool:
-                    raise TypeError('Expected boolean from {0} class'.format(authenticator.__name__))
-
-                if response[0]:
-                    self.is_authenticated = True
-                    self.result = response[1]
-                    # raising warning if the user return none in the request
-                    if not response[1]:
-                        raise Warning('Received null response from {0} class. This response will be passed to the '
-                                      'view layer.'.format(authenticator.__name__))
-                    break
             else:
-                raise TypeError('Unexpected type return from {0} class'.format(authenticator.__name__))
-
-        return self.is_authenticated, self.result
+                raise TypeError('Unexpected return type from {0} class'.format(authenticator.__name__))
+        return self.is_authenticated
