@@ -4,13 +4,13 @@
 > The django-rest middleware on steroids.
 
 # Overview
-The guardian is highly flexible middleware for the django-rest. 
+The guardian is highly flexible middleware for the django-rest class based views. 
 
 The current issue with the django-rest permission is that they are applied at class level and hence making it difficult to have seprarate permissions for individual methods. The guardian solves this issue by providing method based authentication.
 
 Some reasons you might want to use Guardian:
 * It can be used to *authenticate the user*
-* It can be used to *verify the payload*
+* It can be used to *authorize the payload*
 * Provides *method based authentications* as well as class based authentication.
 
 # Requirements
@@ -26,9 +26,9 @@ Install using `pip`...
     
 # Example
 
-Let's take a look at a quick example of using **guardian** to build a simple middleware for authenticating user and verifying payload.
+Let's take a look at a quick example of using **guardian** to build a simple middleware for authenticating user and authorizing payload.
 
-**User Authentication**
+**1. User Authentication**
 
 Create a Permssion class in your desired file eg: `app/permission.py` by inherinting the **permission** class from guardian module and overriding the **guard** method
 
@@ -86,7 +86,7 @@ class UserAuthenticator(AuthPermission):
         
  ```
  
- The guardian uses a logical **short circut or** on the both the authenticator class.
+ The guardian uses a logical **short circut OR** on the both the authenticator class.
  
  `app/views.py`
  
@@ -99,10 +99,36 @@ class UserAuthenticator(AuthPermission):
         
         return Response({'result': True}, status=status.HTTP_200_OK)
 ```
+
+**2. Payload Authorization**
  
+ The guardian can also be used to to authorize the payload sent by the frontend.
+ Let's assume this is the payload sent by the frontend
  
+ ```javascript
+ {
+    "id": 5,
+    "name": "John",
+    "hobbies": ["Footbal", "Fencing"]
+ }
  
+ ```
  
+ Let's verify the payload
+ 
+ `app/views.py`
+ 
+ ```python
+ class UserView(APIView):
+    
+    # returns 400 if the payload is invalid
+    @guardian(id=int, name=unicode, hobbies=list) # we use unicode because python treats the string as unicode for data.
+    def get(self, request):
+        print 'The payload is correct if you are seeing this message'
+        
+        return Response({'result': True}, status=status.HTTP_200_OK)
+```
+
  
  
  
