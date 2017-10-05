@@ -39,6 +39,43 @@ class PayloadAuthenticator:
                 self.is_authenticated = False
                 break
 
+    def __list_checker(self, validator, data):
+        # Check if the passed data is list or not
+        if type(data) != list:
+            return False
+
+        if len(validator) > 0:
+            validator_type = validator[0]
+
+            if type(validator_type) == list:
+                is_checked = True
+
+                # Check for every element in the data that it is list or not
+                for element in data:
+                    is_checked = self.__list_checker(validator[0], element) and is_checked
+
+                return is_checked
+            else:
+                # Check if type of every element is
+                for element in data:
+                    if type(element) != validator_type:
+                        return False
+
+                return True
+        else:
+            return True
+
+    def __type_enforcer(self, variable):
+        # Check if the variable is simply list or dict without any further validations
+        if type(self.payload[variable]) == type:
+            return type(self.request_data[variable]) == self.payload[variable]
+        elif type(self.payload[variable]) == list:
+            # The variable has further validations on top of it being a list
+            return self.__list_checker(self.payload[variable], self.request_data[variable])
+        else:
+            # Constant has been passed to check
+            return self.request_data[variable] == self.payload[variable]
+
     def __type_verifier(self, variable):
         # if the variable is None then no need to check type
         if self.payload[variable] is None:
@@ -53,7 +90,7 @@ class PayloadAuthenticator:
             if self.current_method == 'GET' \
                     and type(self.payload[variable](self.request_data[variable])) == self.payload[variable]:
                 return True
-            elif self.current_method == 'POST' and type(self.request_data[variable]) == self.payload[variable]:
+            elif self.current_method == 'POST' and self.__type_enforcer(variable):
                 return True
 
             return False

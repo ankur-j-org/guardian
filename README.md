@@ -129,6 +129,16 @@ class UserAuthenticator(AuthPermission):
         return Response({'result': True}, status=status.HTTP_200_OK)
 ```
 
+Guardian also supports validating n-dimensional lists.
+
+What To Write | What Happens
+--- | ---
+list | simply validates if payload is list
+[] | works same as *list*
+[ int ] | Validates that a list should contain only integers. *Here **int** can be replaced by any acceptable python data type, even list. See below.*
+[[ unicode ]] | Validates that a list should contain only lists which should contain only unicode Strings. In simpler terms payload should contain two-dimensional list of Strings.
+[[[[[[ int ]]]]]] | This, well...This validates for (count-no-of-square-brackets) dimensional list of integers. I think you get the point.
+
 # More Stuff
 
 **1. Both user authentication and payload verification**
