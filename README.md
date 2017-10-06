@@ -131,13 +131,21 @@ class UserAuthenticator(AuthPermission):
 
 Guardian also supports validating n-dimensional lists.
 
-What To Write | What Happens
---- | ---
-list | simply validates if payload is list
-[] | works same as *list*
-[ int ] | Validates that a list should contain only integers. *Here **int** can be replaced by any acceptable python data type, even list. See below.*
-[[ unicode ]] | Validates that a list should contain only lists which should contain only unicode Strings. In simpler terms payload should contain two-dimensional list of Strings.
-[[[[[[ int ]]]]]] | This, well...This validates for (count-no-of-square-brackets) dimensional list of integers. I think you get the point.
+What To Write            | What Happens
+:-----------------------:| ------------
+list                     | simply validates if payload is list
+[]                       | works same as *list*
+[ int ]                  | Validates that a list should contain only integers. *                           **int** can be replaced by any acceptable python data type,                           even list.*
+[[ unicode ]]            | Validates that payload should contain two-dimensional list of Strings.
+[[[[[[ int ]]]]]]        | This validates for                   (count-no-of-square-brackets) dimensional list of integers. I think you get the      point.
+
+Guardian also supports validating insides of a dict.
+
+What to Write | What Happens
+:------------:| ------------
+{ 'id': int } | Checks in the payload that id should be an integer
+{ 'user': {'name': unicode, 'email': unicode }} | Checks that user is a dict which has name as unicode and email as unicode
+{ 'ids': [int] } | Checks that ids is a list of integers.
 
 # More Stuff
 
