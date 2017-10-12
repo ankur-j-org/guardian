@@ -16,7 +16,7 @@ class UserAuthenticator(object):
         # if there is no authenticators return True
         if not self.authenticator_list:
             self.is_authenticated = True
-            return self.is_authenticated, self.result
+            return self.is_authenticated
 
         for authenticator in self.authenticator_list:
 
