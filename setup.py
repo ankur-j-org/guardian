@@ -5,7 +5,7 @@ setup(
     name="django_rest_guardian",
 
     # Version number (initial):
-    version="1.1.0  ",
+    version="1.1.1",
 
     # Application author details:
     author="Ankur Jain",
